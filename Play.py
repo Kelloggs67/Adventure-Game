@@ -1,3 +1,6 @@
+from Player import *
+
+
 def create_character():
     name_input = input("What is your name?").strip().capitalize()
     player1.name = name_input
