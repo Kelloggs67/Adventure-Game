@@ -80,12 +80,5 @@ def build_house():
     house.add_connection(living_room, kitchen)
     house.add_connection(living_room, front_door, "Locked")
 
-
-    #house.find_path(bedroom, front_door)
-    #house.peek_next_rooms(living_room)
-    #house.set_current_room(living_room)
-    #house.set_current_room(bathroom)
     return house
 
-house = build_house()
-house.find_path(bedroom, front_door)
