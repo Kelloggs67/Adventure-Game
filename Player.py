@@ -1,3 +1,6 @@
+import sys,time,random
+from Environments import *
+
 class Player:
     def __init__(self, name=None):
         self.name = name
@@ -11,7 +14,6 @@ class Player:
                          "Feet": None,
                          "Weapon": None}
         self.inventory = []
-
 
     def __repr__(self):
         return "{0}\nHealth: {1}\nAttack: {2}\nArmor: {3}\n".format(self.name, self.stats["max_health"], self.stats["attack"], self.stats["armor"])
@@ -53,7 +55,6 @@ class Player:
             self.inventory.append(item)
 
 
-
     def equip(self, item):
         if item not in self.inventory:
             print("You do not have that item.")
@@ -66,5 +67,21 @@ class Player:
             self.update_stats_equip()
 
 
+typing_speed = 120
 
-player1 = Player()
+def delay_print(t):
+    for l in t:
+        sys.stdout.write(l)
+        sys.stdout.flush()
+        time.sleep(random.random()*10.0/typing_speed)
+
+
+def create_character():
+    delay_print("What is your name?\n")
+    name_input = input("> ").strip().capitalize()
+    player1 = Player(name_input)
+    delay_print("Hello " + player1.name + "\n")
+    time.sleep(2)
+    return player1
+
+

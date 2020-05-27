@@ -16,6 +16,9 @@ class Map:
         if not self.directed:
             self.map_dict[to_room.name].add_connection(from_room.name, weight)
 
+    def remove_connection(self, from_room, to_room):
+        pass
+
 
     def find_path(self, start_room, end_room):
         start = [start_room.name]
@@ -60,7 +63,10 @@ class Map:
         self.current_room = room
 
     def change_rooms(self, room):
-        self.current_room = room
+        if self.current_room.connections[room] == "Unlocked":
+            self.current_room = room
+        else:
+            print(room.name + "is locked")
 
 
 
@@ -81,4 +87,3 @@ def build_house():
     house.add_connection(living_room, front_door, "Locked")
 
     return house
-
