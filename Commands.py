@@ -1,4 +1,5 @@
-from Play import *
 
-commands = []
+
+list_of_commands = []
+
 
