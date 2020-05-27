@@ -48,7 +48,7 @@ class Player:
             print("You don't have this item equipped.")
         else:
             print(self.name + " unequiped " + item.name)
-            self.update_stats_equip()
+            self.update_stats_unequip()
             self.equipped[item.equip] = None
             self.inventory.append(item)
 
@@ -63,19 +63,8 @@ class Player:
             print(self.name + " equipped " + item.name)
             self.inventory.pop(self.inventory.index(item))
             self.equipped[item.equip] = item
-            self.update_stats()
+            self.update_stats_equip()
 
 
 
 player1 = Player()
-
-
-'''''''''
-print(player1)
-player1.pick_up(rusty_axe)
-player1.equip(rusty_axe)
-print(player1)
-player1.pick_up(cool_sword)
-player1.equip(cool_sword)
-print(player1)
-'''''''''

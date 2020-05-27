@@ -1,9 +1,12 @@
 from Player import *
-
+from Items import *
+from Map import *
 
 def create_character():
-    name_input = input("What is your name?").strip().capitalize()
+    print("What is your name?")
+    name_input = input("> ").strip().capitalize()
     player1.name = name_input
+    return player1
 
 
 def play_game():
