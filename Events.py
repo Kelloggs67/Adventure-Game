@@ -1,8 +1,6 @@
 class Event:
-    def __init__(self, state=False, restrictions):
-        self.state = state
-        self.restrictions = restrictions
-        self.condition
+    def __init__(self, state=False):
+        self.state = state #todo useless??????
 
 start_of_game = Event()
 get_out_of_bed = Event()

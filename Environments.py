@@ -4,7 +4,7 @@ from Events import *
 from Objects import *
 
 
-class Environment:
+class Environment    #todo maybe move environments to play file?
     def __init__(self, map):
         self.map = map
         self.characters = {}
@@ -41,5 +41,4 @@ class Environment:
             self.objects[room] = []
 
 
-env_house = Environment(build_house())
-
+env_house = Environment(house)

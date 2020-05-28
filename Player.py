@@ -14,6 +14,7 @@ class Player:
                          "Feet": None,
                          "Weapon": None}
         self.inventory = []
+        self.current_room = None
 
     def __repr__(self):
         return "{0}\nHealth: {1}\nAttack: {2}\nArmor: {3}\n".format(self.name, self.stats["max_health"], self.stats["attack"], self.stats["armor"])
@@ -24,7 +25,11 @@ class Player:
         print(self.name + " picked up " + item.name)
         self.inventory.append(item)
 
-
+    def use_potion(self, item):
+        if item in self.inventory:
+            self.health += item.health
+        else:
+            print("You don't have that item")
 
     def update_stats_equip(self):
         equipped = self.equipped.values()
