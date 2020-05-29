@@ -39,9 +39,11 @@ class Static():
 
     _instances = set()
 
-    def __init__(self, description):
+    def __init__(self, name, description, state):
+        self.name = name
         self.description = description
-        self.interactions = []
+        self.interactions = {}
+        self.state = state
         self._instances.add(weakref.ref(self))
 
     @classmethod
@@ -55,7 +57,13 @@ class Static():
                 dead.add(ref)
         cls._instances -= dead
 
-bed = Static("Your bed feels comfy")
+bed = Static("bed", "This has been your bed all your life.", "in bed")
+bed.state = "in bed"
+def get_out_of_bed():
+    bed.state = "out of bed"
+bed.interactions["get out"] = get_out_of_bed
+bed.interactions["hop out"] = get_out_of_bed
+
 
 all_items = []
 for obj in Items.getinstances():
@@ -64,3 +72,7 @@ for obj in Items.getinstances():
 all_statics = []
 for obj in Static.getinstances():
     all_statics.append(obj)
+
+all_things = all_items + all_statics
+
+

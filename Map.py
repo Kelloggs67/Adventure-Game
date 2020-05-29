@@ -73,7 +73,6 @@ class WorldMap(Map):
     pass
 
 
-
 house = Map("House")
 house.add_room(bedroom)
 house.add_room(bathroom)
@@ -84,6 +83,3 @@ house.add_connection(bedroom, living_room)
 house.add_connection(living_room, bathroom)
 house.add_connection(living_room, kitchen)
 house.add_connection(living_room, front_door, "Locked")
-
-world_map = WorldMap("World Map")
-world_map.add_room(house)

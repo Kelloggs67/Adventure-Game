@@ -1,5 +1,4 @@
 import sys,time,random
-from Environments import *
 
 class Player:
     def __init__(self, name=None):
