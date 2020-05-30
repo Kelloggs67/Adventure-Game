@@ -69,6 +69,9 @@ class Map:
             print(room.name + "is locked")
 
 
+def change_rooms(room):
+    house.change_rooms(room)
+
 class WorldMap(Map):
     pass
 
