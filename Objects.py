@@ -68,6 +68,7 @@ def make_bed():
     bed.description = "The bed is nicely made"
 bed.interactions["get out"] = get_out_of_bed
 bed.interactions["hop out"] = get_out_of_bed
+bed.interactions["leave"] = get_out_of_bed
 bed.interactions["make"] = make_bed
 
 

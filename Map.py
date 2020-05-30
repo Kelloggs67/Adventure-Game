@@ -61,6 +61,7 @@ class Map:
     def set_starting_room(self, room):
         self.starting_room = room
         self.current_room = room
+        player1.current_room = room
 
     def change_rooms(self, room):
         if self.current_room.connections[room] == "Unlocked":
@@ -68,9 +69,24 @@ class Map:
         else:
             print(room.name + "is locked")
 
+    def leave_room(self):
+        self.peek_next_rooms(self.current_room)
+
 
 def change_rooms(room):
-    house.change_rooms(room)
+    if house.current_room == room:
+        return delay_print("You're already in that room.")
+    if room not in (room.connections and house.map_dict.values()):
+        return delay_print("You can't get there from here")
+    else:
+        house.change_rooms(room)
+        player1.current_room(room)
+
+def leave_room():
+    delay_print("Where would you like to go?")
+    house.peek_next_rooms(house.current_room)
+    room = input("> ")
+    change_rooms(room)
 
 class WorldMap(Map):
     pass
