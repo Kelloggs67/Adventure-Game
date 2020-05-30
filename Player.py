@@ -14,6 +14,8 @@ class Player:
                          "Weapon": None}
         self.inventory = []
         self.current_room = None
+        self.state = None
+        self.change_state = []
 
     def __repr__(self):
         return "{0}\nHealth: {1}\nAttack: {2}\nArmor: {3}\n".format(self.name, self.stats["max_health"], self.stats["attack"], self.stats["armor"])
@@ -80,12 +82,17 @@ def delay_print(t):
         time.sleep(random.random()*10.0/typing_speed)
 
 
+
 def create_character():
     delay_print("What is your name?\n")
     name_input = input("> ").strip().capitalize()
-    player1 = Player(name_input)
+    player1.name = name_input
     delay_print("Hello " + player1.name + "\n")
     time.sleep(2)
     return player1
 
+
+
+player1 = Player()
+player1.change_state.append("get_out_of_bed")
 

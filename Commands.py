@@ -1,4 +1,4 @@
-from Player import *
+
 from Map import *
 from nltk.corpus import wordnet as wn
 all_items
@@ -35,8 +35,13 @@ def command(room, object=None):
                     else:
                         continue
             if action_string.strip() in object_to_take_action_on.interactions.keys():
-                action = object_to_take_action_on.interactions[action_string.strip()]()
-                return action
+                action = object_to_take_action_on.interactions[action_string.strip()]
+                if player1.state:
+                    if action.__name__ in player1.change_state:
+                        return action()
+                    else:
+                        return delay_print("You can't do that while " + player1.state + "\n")
+                return action()
     # for command in list_of_commands:
     #    if command in key:
     #       action = list_of_commands[command]

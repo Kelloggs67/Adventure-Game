@@ -1,4 +1,5 @@
 import weakref
+from Player import *
 
 class Items():
 
@@ -61,8 +62,13 @@ bed = Static("bed", "This has been your bed all your life.", "in bed")
 bed.state = "in bed"
 def get_out_of_bed():
     bed.state = "out of bed"
+    player1.state = None
+def make_bed():
+    print("You made your bed")
+    bed.description = "The bed is nicely made"
 bed.interactions["get out"] = get_out_of_bed
 bed.interactions["hop out"] = get_out_of_bed
+bed.interactions["make"] = make_bed
 
 
 all_items = []

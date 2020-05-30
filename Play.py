@@ -3,8 +3,9 @@ from Commands import *
 
 
 def play_game():
-    player1 = create_character()
+    create_character()
     house.set_starting_room(bedroom)
+    player1.state = "in bed"
     delay_print("You wake up in {0}.\n".format(house.current_room.name))
     delay_print("What would you like to do?\n")
     count = 0
