@@ -3,6 +3,7 @@ from Commands import *
 
 
 def play_game():
+    print("hey kenny")
     create_character()
     house.set_starting_room(bedroom)
     player1.state = "in bed"
