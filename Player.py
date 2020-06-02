@@ -1,4 +1,5 @@
 import sys,time,random
+import winsound
 
 class Player:
     def __init__(self, name=None):
@@ -16,6 +17,7 @@ class Player:
         self.current_room = None
         self.state = None
         self.change_state = []
+        self.functions = {}
 
     def __repr__(self):
         return "{0}\nHealth: {1}\nAttack: {2}\nArmor: {3}\n".format(self.name, self.stats["max_health"], self.stats["attack"], self.stats["armor"])
@@ -96,4 +98,3 @@ def create_character():
 
 player1 = Player()
 player1.change_state.append("get_out_of_bed")
-

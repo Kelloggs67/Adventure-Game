@@ -7,6 +7,9 @@ class Map:
         self.map_dict = {}
         self.starting_room = None
         self.current_room = None
+        self.connections = {}
+        self.functions = {}
+
 
     def add_room(self, room):
         self.map_dict[room.name] = room
@@ -63,42 +66,57 @@ class Map:
         self.current_room = room
         player1.current_room = room
 
-    def change_rooms(self, room):
-        if self.current_room.connections[room] == "Unlocked":
+    def change_rooms(self, room, action=None):
+        if self.current_room.connections[room.name] == "Unlocked":
             self.current_room = room
+            player1.current_room = room
+            delay_print("You " + action + " " + room.name + ".")
         else:
-            print(room.name + "is locked")
+            print(room.name + " is locked")
 
     def leave_room(self):
         self.peek_next_rooms(self.current_room)
 
 
-def change_rooms(room):
-    if house.current_room == room:
+#WORLD MAP
+world_map = Map("World Map")
+#HOUSE
+world_map.add_room(bedroom)
+world_map.add_room(bathroom)
+world_map.add_room(kitchen)
+world_map.add_room(living_room)
+world_map.add_room(front_door)
+world_map.add_connection(bedroom, living_room)
+world_map.add_connection(living_room, bathroom)
+world_map.add_connection(living_room, kitchen)
+world_map.add_connection(living_room, front_door, "Locked")
+
+
+
+
+#FUNCTIONS
+def change_rooms(room, action):
+    if world_map.current_room == room:
         return delay_print("You're already in that room.")
-    if room not in (room.connections and house.map_dict.values()):
-        return delay_print("You can't get there from here")
+    if room.name not in world_map.current_room.get_connections():
+        if room in world_map.map_dict.values():
+            return delay_print("You can't get there from here")
+        else:
+            return print("HUH?")
     else:
-        house.change_rooms(room)
-        player1.current_room(room)
+        world_map.change_rooms(room, action)
 
 def leave_room():
     delay_print("Where would you like to go?")
-    house.peek_next_rooms(house.current_room)
+    world_map.peek_next_rooms(world_map.current_room)
     room = input("> ")
     change_rooms(room)
 
-class WorldMap(Map):
-    pass
+
+change_room_commands = ("move to", "go to", "enter")
+world_map.functions[change_room_commands] = change_rooms
+leave_room_commands = ("leave", "exit", "change rooms")
+world_map.functions[leave_room_commands] = leave_room
+room_commands = [change_room_commands, leave_room_commands]
 
 
-house = Map("House")
-house.add_room(bedroom)
-house.add_room(bathroom)
-house.add_room(kitchen)
-house.add_room(living_room)
-house.add_room(front_door)
-house.add_connection(bedroom, living_room)
-house.add_connection(living_room, bathroom)
-house.add_connection(living_room, kitchen)
-house.add_connection(living_room, front_door, "Locked")

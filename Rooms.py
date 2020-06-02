@@ -19,9 +19,24 @@ class Room:
         self.objects[object.name] = object
 
 bedroom = Room("your bedroom")
-living_room = Room("The Living Room")
-bathroom = Room("The Bathroom")
-kitchen = Room("The Kitchen")
-front_door = Room("The Front Door")
+living_room = Room("the living room")
+bathroom = Room("the bathroom")
+kitchen = Room("the kitchen")
+front_door = Room("the front door")
 
 bedroom.place_object(bed)
+
+class Building:
+    def __init__(self, name, rooms, doors):
+        self.name = name
+        self.rooms = rooms
+        self.connections = {}
+        self.doors = doors
+
+    def add_connection(self, building, weight=0):
+        self.connections[building] = weight
+
+    def get_connections(self):
+        return list(self.connections.keys())
+
+house = Building("your house", [bedroom, living_room, bathroom, kitchen], [front_door])
