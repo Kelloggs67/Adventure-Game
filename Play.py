@@ -13,7 +13,7 @@ def play_game():
     while bed.state == "in bed":
         action = command()
         if bed.state == "in bed":
-            if count <= 2:
+            if count <= 5:
                 delay_print("Why don't you try getting out of bed.")
             else:
                 continue

@@ -19,7 +19,7 @@ def command():
     elif key == ("stats" or "statistics"):
         return print(player1)
     elif key == ("room" or "current room"):
-        return print("You're in " + world_map.current_room.name)
+        return delay_print("You're in " + world_map.current_room.name)
     for useless in words:
         if useless == "the" or useless == "of":
             words.pop(words.index(useless))
