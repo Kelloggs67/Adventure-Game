@@ -63,6 +63,7 @@ class Static():
 
 bed = Static("bed", "This has been your bed all your life.", "in bed")
 bed.state = "in bed"
+
 def get_out_of_bed():
     if bed.state == "out of bed":
         return delay_print("You're already out of bed.")
@@ -79,8 +80,7 @@ def get_in_bed():
     bed.state = "in bed"
     player1.state = "in bed"
 
-get_out_of_bed_commands = ("get out", "hop out", "leave")
-bed.interactions[get_out_of_bed_commands] = get_out_of_bed
+
 bed.interactions["get out"] = get_out_of_bed
 bed.interactions["hop out"] = get_out_of_bed
 bed.interactions["leave"] = get_out_of_bed

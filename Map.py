@@ -53,12 +53,12 @@ class Map:
         print("")
 
     def peek_next_rooms(self, current_room):
-        print(current_room.name + " connected to")
+        print(current_room.name.capitalize() + " is connected to")
         for adjacent_room in current_room.get_connections():
             if current_room.connections[adjacent_room] == "Unlocked":
-                print("=>" + adjacent_room)
+                print("=>" + adjacent_room.capitalize())
             else:
-                print("=>" + adjacent_room + " [X]")
+                print("=>" + adjacent_room.capitalize() + " [X]")
         print("")
 
     def set_starting_room(self, room):
@@ -70,7 +70,10 @@ class Map:
         if self.current_room.connections[room.name] == "Unlocked":
             self.current_room = room
             player1.current_room = room
-            delay_print("You " + action + " " + room.name + ".")
+            if action == None:
+                delay_print("You go into " + room.name + ".")
+            else:
+                delay_print("You " + action + " " + room.name + ".")
         else:
             print(room.name + " is locked")
 
@@ -95,22 +98,33 @@ world_map.add_connection(living_room, front_door, "Locked")
 
 
 #FUNCTIONS
-def change_rooms(room, action):
+def change_rooms(room, action=None):
     if world_map.current_room == room:
         return delay_print("You're already in that room.")
     if room.name not in world_map.current_room.get_connections():
         if room in world_map.map_dict.values():
             return delay_print("You can't get there from here")
         else:
-            return print("HUH?")
+            return print("Huh?")
     else:
         world_map.change_rooms(room, action)
 
 def leave_room():
-    delay_print("Where would you like to go?")
+    delay_print("Where would you like to go?\n")
     world_map.peek_next_rooms(world_map.current_room)
-    room = input("> ")
-    change_rooms(room)
+    key = input("> ")
+    words = key.split()
+    try:
+        for word in words:
+            if word == "the" or word == "room":
+                words.pop(words.index(word))
+                for other_word in words:
+                    for room in world_map.map_dict.keys():
+                        if other_word in room:
+                            return change_rooms(world_map.map_dict[room])
+    except:
+        return delay_print("Huh?")
+
 
 
 change_room_commands = ("move to", "go to", "enter", "walk to", "jump to", "waddle to", "fly to", "go into", "move into", "walk into", "fly into")

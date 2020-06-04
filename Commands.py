@@ -2,27 +2,36 @@ from Map import *
 from nltk.corpus import wordnet as wn
 
 
-
+confirm_commands = ("ok", "okay", "sure", "let's do that", "fine", "okay, fine", "okay fine")
 
 def command():
     key = input("> ")
-    full_sentence = key
     room = world_map.current_room
     words_original = key.split()
     words = key.split()
     action_string = " "
-    if key == ("inventory" or "pockets"):
+    if words[0] in ("dont", "don't"):
+       return delay_print("okay...")
+    if key == "inventory" or key == "pockets":
         if not player1.inventory:
             delay_print("You don't have anything on you.")
         else:
             return print(player1.inventory)
-    elif key == ("stats" or "statistics"):
+    if key == "stats" or key == "statistics":
         return print(player1)
-    elif key == ("room" or "current room"):
+    if key == "room" or key == "current room":
         return delay_print("You're in " + world_map.current_room.name)
     for useless in words:
-        if useless == "the" or useless == "of":
+        if useless == "the" or useless == "of" or len(useless) <= 1 or useless == "room":
             words.pop(words.index(useless))
+    if key in confirm_commands:
+        return key
+    if key in (leave_room_commands or change_room_commands):
+        functionality = check_player_state()
+        if functionality == False:
+            return
+        else:
+            return leave_room()
     else:
         for word in words:
             if word in room.objects:
@@ -67,6 +76,14 @@ def command():
                             return
                         else:
                             return action(room_to_go_to, action_string.strip())
+                    elif action_string.strip() in leave_room_commands:
+                        action = world_map.functions[leave_room_commands]
+                        functionality = check_player_state(action)
+                        if functionality == False:
+                            return
+                        else:
+                            return action()
+
 
 
                 
@@ -74,11 +91,15 @@ def command():
 
 
 
-def check_player_state(action):
+def check_player_state(action=None):
     if player1.state:
-        if action.__name__ in player1.change_state:
-            return True
-        else:
+        try:
+            if action.__name__ in player1.change_state:
+                return True
+            else:
+                delay_print("You can't do that while " + player1.state)
+                return False
+        except:
             delay_print("You can't do that while " + player1.state)
             return False
 
