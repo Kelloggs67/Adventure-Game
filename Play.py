@@ -6,6 +6,7 @@ from Commands import *
 def play_game():
     create_character()
     world_map.set_starting_room(bedroom)
+    player1.current_building = house
     player1.state = "in bed"
     delay_print("You wake up in your bed.")
     delay_print("What would you like to do?")
@@ -39,9 +40,8 @@ def play_game():
             else:
                 continue
         count += 1
-    in_house = True
-    while in_house:
-        command()
+    while player1.current_room == bedroom:
+       action = command()
 
 
 

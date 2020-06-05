@@ -18,6 +18,7 @@ class Player:
         self.state = None
         self.change_state = []
         self.functions = {}
+        self.current_building = Nonen
 
     def __repr__(self):
         return "{0}\nHealth: {1}\nAttack: {2}\nArmor: {3}\n".format(self.name, self.stats["max_health"], self.stats["attack"], self.stats["armor"])

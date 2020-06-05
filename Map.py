@@ -75,7 +75,7 @@ class Map:
             else:
                 delay_print("You " + action + " " + room.name + ".")
         else:
-            print(room.name + " is locked")
+            print("The door to " + room.name + " is locked")
 
     def leave_room(self):
         self.peek_next_rooms(self.current_room)
@@ -89,7 +89,7 @@ world_map.add_room(bathroom)
 world_map.add_room(kitchen)
 world_map.add_room(living_room)
 world_map.add_room(front_door)
-world_map.add_connection(bedroom, living_room)
+world_map.add_connection(bedroom, living_room, "Locked")
 world_map.add_connection(living_room, bathroom)
 world_map.add_connection(living_room, kitchen)
 world_map.add_connection(living_room, front_door, "Locked")
@@ -113,6 +113,8 @@ def leave_room():
     delay_print("Where would you like to go?\n")
     world_map.peek_next_rooms(world_map.current_room)
     key = input("> ")
+    if key not in world_map.map_dict.keys():
+        return   delay_print("That's not a room.")
     words = key.split()
     try:
         for word in words:
@@ -129,7 +131,7 @@ def leave_room():
 
 change_room_commands = ("move to", "go to", "enter", "walk to", "jump to", "waddle to", "fly to", "go into", "move into", "walk into", "fly into")
 world_map.functions[change_room_commands] = change_rooms
-leave_room_commands = ("leave", "exit", "change rooms")
+leave_room_commands = ("leave", "exit", "change rooms", "leave room")
 world_map.functions[leave_room_commands] = leave_room
 room_commands = [change_room_commands, leave_room_commands]
 

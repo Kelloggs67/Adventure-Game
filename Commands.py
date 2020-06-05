@@ -1,11 +1,15 @@
 from Map import *
 from nltk.corpus import wordnet as wn
-
+import string
 
 confirm_commands = ("ok", "okay", "sure", "let's do that", "fine", "okay, fine", "okay fine")
 
 def command():
-    key = input("> ")
+    key_original = input("> ")
+    for character in key_original:
+        if character in string.punctuation:
+            key_original = key_original.replace(character, "")
+        key = key_original
     room = world_map.current_room
     words_original = key.split()
     words = key.split()
@@ -20,7 +24,7 @@ def command():
     if key == "stats" or key == "statistics":
         return print(player1)
     if key == "room" or key == "current room":
-        return delay_print("You're in " + world_map.current_room.name)
+        return delay_print("You're in " + world_map.current_room.name + ".")
     for useless in words:
         if useless == "the" or useless == "of" or len(useless) <= 1 or useless == "room":
             words.pop(words.index(useless))
@@ -77,12 +81,15 @@ def command():
                         else:
                             return action(room_to_go_to, action_string.strip())
                     elif action_string.strip() in leave_room_commands:
-                        action = world_map.functions[leave_room_commands]
-                        functionality = check_player_state(action)
-                        if functionality == False:
-                            return
+                        if room_to_go_to != player1.current_room:
+                            return delay_print("You're not in that room")
                         else:
-                            return action()
+                            action = world_map.functions[leave_room_commands]
+                            functionality = check_player_state(action)
+                            if functionality == False:
+                                return
+                            else:
+                                return action()
 
 
 
@@ -102,6 +109,8 @@ def check_player_state(action=None):
         except:
             delay_print("You can't do that while " + player1.state)
             return False
+    else:
+        return True
 
 
 

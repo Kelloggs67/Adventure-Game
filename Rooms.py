@@ -6,7 +6,9 @@ class Room:
         self.connections = {}
         self.objects = {}
         self.characters = []
-        self.loot = []
+        self.room_loot = []
+        self.chest_loot = []
+        self.loot = self.room_loot + self.chest_loot
         self.description = None
 
     def add_connection(self, room, weight="Unlocked"):
@@ -25,6 +27,10 @@ kitchen = Room("the kitchen")
 front_door = Room("the front door")
 
 bedroom.place_object(bed)
+bedroom.place_object(bedroom_dresser)
+
+
+
 
 class Building:
     def __init__(self, name, rooms, doors):
