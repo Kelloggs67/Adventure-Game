@@ -6,9 +6,8 @@ class Room:
         self.connections = {}
         self.objects = {}
         self.characters = []
-        self.room_loot = []
         self.chest_loot = []
-        self.loot = self.room_loot + self.chest_loot
+        self.loot = []
         self.description = None
 
     def add_connection(self, room, weight="Unlocked"):

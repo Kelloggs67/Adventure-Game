@@ -18,7 +18,7 @@ class Player:
         self.state = None
         self.change_state = []
         self.functions = {}
-        self.current_building = Nonen
+        self.current_building = None
 
     def __repr__(self):
         return "{0}\nHealth: {1}\nAttack: {2}\nArmor: {3}\n".format(self.name, self.stats["max_health"], self.stats["attack"], self.stats["armor"])
@@ -26,8 +26,14 @@ class Player:
 
 
     def pick_up(self, item):
-        print(self.name + " picked up " + item.name)
+        delay_print(self.name + " picked up the " + item.name + ".")
         self.inventory.append(item)
+        if item in self.current_room.loot:
+            self.current_room.loot.remove(item)
+        if item in self.current_room.chest_loot:
+            self.current_room.chest_loot.remove(item)
+        else:
+            delay_print("That item isn't here.")
 
     def use_potion(self, item):
         if item in self.inventory:
@@ -85,6 +91,8 @@ def delay_print(t):
         time.sleep(random.random()*10.0/typing_speed)
     print('')
 
+player1 = Player()
+player1.change_state.append("get_out_of_bed")
 
 
 def create_character():
@@ -97,5 +105,6 @@ def create_character():
 
 
 
-player1 = Player()
-player1.change_state.append("get_out_of_bed")
+
+
+
