@@ -9,6 +9,7 @@ def play_game():
     player1.current_building = house
     player1.state = "in bed"
     delay_print("You wake up in your bed.")
+    delay_print(bedroom.description)
     delay_print("What would you like to do?")
     count = 0
     compliance = False

@@ -1,5 +1,6 @@
 from Objects import *
 
+
 class Room:
     def __init__(self, name):
         self.name = name
@@ -19,6 +20,7 @@ class Room:
     def place_object(self, object):
         self.objects[object.name] = object
 
+
 bedroom = Room("your bedroom")
 living_room = Room("the living room")
 bathroom = Room("the bathroom")
@@ -27,8 +29,9 @@ front_door = Room("the front door")
 
 bedroom.place_object(bed)
 bedroom.place_object(bedroom_dresser)
-
-
+bedroom.place_object(bedroom_lamp)
+bedroom.place_object(bedroom_light)
+bedroom.description = "All that is left in your room is the lamp next to your bed and your dresser. "
 
 
 class Building:
@@ -43,5 +46,6 @@ class Building:
 
     def get_connections(self):
         return list(self.connections.keys())
+
 
 house = Building("your house", [bedroom, living_room, bathroom, kitchen], [front_door])

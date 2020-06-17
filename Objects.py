@@ -5,7 +5,7 @@ from Player import *
 class Items():
     _instances = set()
 
-    def __init__(self, name, type, attack, armor, max_health, health, equip, price, use=False):
+    def __init__(self, name, type, attack, armor, max_health, health, equip, price, level):
         self.name = name
         self.type = type
         self.attack = attack
@@ -14,8 +14,8 @@ class Items():
         self.health = health
         self.equip = equip
         self.price = price
+        self.level = level
         self._instances.add(weakref.ref(self))
-        self.use = use
         self.description = None
 
     def __repr__(self):
@@ -33,10 +33,38 @@ class Items():
         cls._instances -= dead
 
 
-rusty_axe = Items("Rusty Axe", "Axe", 5, 0, 0, 0, "Weapon", 10)
-cool_sword = Items("Cool Sword", "Sword", 7, 0, 0, 0, "Weapon", 12)
-potion = Items("Potion", "Potion", 0, 0, 0, 5, False, 5, True)
-bedroom_key = Items("bedroom key", "key", 0, 0, 0, 0, 0, 0, True)
+rusty_axe = Items("Rusty Axe", "Axe", 5, 0, 0, 0, "Weapon", 10, 1)
+bike_helmet = Items("Bike Helmet", "Helmet", 0, 2, 0, 0, "Head", 5, 1)
+cool_sword = Items("Cool Sword", "Sword", 7, 0, 0, 0, "Weapon", 12, 1)
+potion = Items("Potion", "Potion", 0, 0, 0, 5, False, 5, 1)
+bedroom_key = Items("bedroom key", "key", 0, 0, 0, 0, False, 0, 0)
+
+all_items = []
+for obj in Items.getinstances():
+    all_items.append(obj)
+
+
+def list_of_random_items(level):
+    complete_list = []
+    armor = []
+    useable = []
+    weapons = []
+    list_items_of_level = []
+    for item in all_items:
+        if item.level == level:
+            list_items_of_level.append(item)
+    for item in list_items_of_level:
+        if not item.equip:
+            useable.append(item)
+        if item.equip == "Weapon":
+            weapons.append(item)
+        else:
+            armor.append(item)
+    armor_choice = random.choice(armor + [None])
+    usable_choice = random.choice(useable + [None])
+    weapons_choice = random.choice(weapons + [None])
+    complete_list.extend([armor_choice, usable_choice, weapons_choice])
+    return complete_list
 
 
 def pick_up_item(item):
@@ -47,7 +75,7 @@ def pick_up_item(item):
         player1.current_room.chest_loot.remove(item)
         player1.pick_up(item)
     else:
-        delay_print("There's not item by that name.")
+        delay_print("There's no item by that name.")
 
 
 class Static():
@@ -73,8 +101,12 @@ class Static():
         cls._instances -= dead
 
 
-# BED
+def add_interactions(thing, interaction_list, function):
+    for command in interaction_list:
+        thing.interactions[command] = function
 
+
+# BED
 bed = Static("bed", "This has been your bed all your life.", "in bed")
 
 
@@ -109,6 +141,45 @@ bed.interactions["jump in"] = get_in_bed
 bed.interactions["go in"] = get_in_bed
 bed.interactions["go to"] = get_in_bed
 
+# BED
+
+# LIGHT
+bedroom_lamp = Static("lamp", "the light is off.", "off")
+bedroom_light = Static("light", "the light is off.", "off")
+light_interactions_on = ["turn on", "open"]
+light_interactions_off = ["turn off", "close"]
+
+
+def turn_on_light():
+    if bedroom_lamp.state == "on":
+        delay_print("The light is already on.")
+    else:
+        delay_print("You turned the light on.")
+        bedroom_lamp.state = "on"
+        bedroom_light.state = "on"
+        bedroom_lamp.description = "The light is on."
+        bedroom_light.description = "The light is on."
+
+
+def turn_off_light():
+    if bedroom_lamp.state == "off":
+        delay_print("The light is already off.")
+    else:
+        delay_print("You turned the light off.")
+        bedroom_lamp.state = "off"
+        bedroom_light.state = "off"
+        bedroom_lamp.description = "The light is on."
+        bedroom_light.description = "The light is on."
+
+
+add_interactions(bedroom_lamp, light_interactions_on, turn_on_light)
+add_interactions(bedroom_light, light_interactions_on, turn_on_light)
+add_interactions(bedroom_light, light_interactions_off, turn_off_light)
+add_interactions(bedroom_lamp, light_interactions_off, turn_off_light)
+
+# LIGHT
+
+# CHESTS
 
 class Chest(Static):
 
@@ -156,6 +227,7 @@ class Chest(Static):
 # Dresser
 bedroom_dresser = Chest("dresser", "It's a big wooden dresser.", "closed")
 bedroom_dresser.loot.append(bedroom_key)
+bedroom_dresser.loot.append(rusty_axe)
 
 
 def open_dresser():
@@ -181,10 +253,9 @@ bedroom_dresser.interactions["place in"] = put_in_dresser
 bedroom_dresser.interactions["close"] = close_dresser
 bedroom_dresser.interactions["shut"] = close_dresser
 bedroom_dresser.interactions["close drawers"] = close_dresser
+bedroom_dresser.interactions["close drawer"] = close_dresser
+# Dresser
 
-all_items = []
-for obj in Items.getinstances():
-    all_items.append(obj)
 
 all_statics = []
 for obj in Static.getinstances():

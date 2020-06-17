@@ -26,7 +26,7 @@ class Player:
 
 
     def pick_up(self, item):
-        delay_print(self.name + " picked up the " + item.name + ".")
+        delay_print("You picked up the " + item.name + ".")
         self.inventory.append(item)
         if item in self.current_room.loot:
             self.current_room.loot.remove(item)

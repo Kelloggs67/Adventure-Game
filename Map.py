@@ -129,7 +129,7 @@ def leave_room():
 
 
 
-change_room_commands = ("move to", "go to", "enter", "walk to", "jump to", "waddle to", "fly to", "go into", "move into", "walk into", "fly into")
+change_room_commands = ("move to", "go to", "enter", "walk to", "jump to", "waddle to", "fly to", "go into", "move into", "walk into", "fly into", "walk over to", "go over to")
 world_map.functions[change_room_commands] = change_rooms
 leave_room_commands = ("leave", "exit", "change rooms", "leave room")
 world_map.functions[leave_room_commands] = leave_room

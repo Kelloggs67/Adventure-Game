@@ -5,20 +5,24 @@ import string
 confirm_commands = ("ok", "okay", "sure", "let's do that", "fine", "okay, fine", "okay fine", "yes", "definitely")
 deny_commands = ("no", "hell no", "nah", "na", "nope", "fuck that")
 pick_up_commands = ("pick up", "take", "loot", "grab", "hold", "get")
+look_around_commands = ("look", "look around", "look")
+
 
 def command():
     key_original = input("> ")
+    if not key_original:
+        return
     for character in key_original:
         if character in string.punctuation:
             key_original = key_original.replace(character, "")
-        key = key_original
+    key = key_original
     room = world_map.current_room
     words_original = key.split()
     words = key.split()
     action_string = " "
     item = None
     if words[0] in ("dont", "don't"):
-       return delay_print("okay...")
+        return delay_print("okay...")
     if key == "inventory" or key == "pockets":
         if not player1.inventory:
             delay_print("You don't have anything on you.")
@@ -67,6 +71,8 @@ def command():
                             return action(get_item(words_original))
                         except:
                             action()
+                else:
+                    delay_print("You can't do that.")
         for word in words:
             for room_name in world_map.map_dict.keys():
                 if word in room_name:
@@ -100,9 +106,13 @@ def command():
                                 return action()
         for word in words:
             for loot in (room.loot + room.chest_loot):
-                if word in loot.name:
+                if word in loot.name.lower():
                     thing_to_pick_up = loot
-                    words.remove(word)
+                    for part in thing_to_pick_up.name:
+                        try:
+                            words.remove(part)
+                        except ValueError:
+                            continue
                     if not words:
                         if thing_to_pick_up in room.loot:
                             delay_print("Pick up " + thing_to_pick_up.name + "?")
@@ -112,7 +122,7 @@ def command():
                             if key in deny_commands:
                                 return
                             else:
-                               return delay_print("huh?")
+                                return delay_print("huh?")
                     else:
                         for other_words in words:
                             if other_words in action_string:
@@ -124,9 +134,6 @@ def command():
                                 player1.pick_up(thing_to_pick_up)
 
 
-
-
-
 def get_item(key):
     for word in key:
         for item in player1.inventory:
@@ -134,12 +141,12 @@ def get_item(key):
                 return item
 
 
-
-
 def check_player_state(action=None):
     if player1.state:
         try:
             if action.__name__ in player1.change_state:
+                return True
+            elif player1.state == "in bed" and ((action == turn_off_light) or (action == turn_on_light)):
                 return True
             else:
                 delay_print("You can't do that while " + player1.state)
@@ -149,11 +156,3 @@ def check_player_state(action=None):
             return False
     else:
         return True
-
-
-
-
-
-
-
-
