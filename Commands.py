@@ -2,10 +2,10 @@ from Map import *
 from nltk.corpus import wordnet as wn
 import string
 
-confirm_commands = ("ok", "okay", "sure", "let's do that", "fine", "okay, fine", "okay fine", "yes", "definitely")
+confirm_commands = ("ok", "okay", "sure", "let's do that", "fine", "okay, fine", "okay fine", "yes", "definitely", "k")
 deny_commands = ("no", "hell no", "nah", "na", "nope", "fuck that")
 pick_up_commands = ("pick up", "take", "loot", "grab", "hold", "get")
-look_around_commands = ("look", "look around", "look")
+look_around_commands = ("look", "look around")
 
 
 def command():
@@ -15,7 +15,7 @@ def command():
     for character in key_original:
         if character in string.punctuation:
             key_original = key_original.replace(character, "")
-    key = key_original
+    key = key_original.lower()
     room = world_map.current_room
     words_original = key.split()
     words = key.split()
@@ -28,14 +28,14 @@ def command():
             delay_print("You don't have anything on you.")
         else:
             return print(player1.inventory)
-    if key == "stats" or key == "statistics":
+    if key == "stats" or key == "statistics" or key == player1.name.lower():
         return print(player1)
     if key == "room" or key == "current room":
         return delay_print("You're in " + world_map.current_room.name + ".")
     if key == "loot":
-        print(room.loot + room.chest_loot)
+        return print(room.loot + room.chest_loot)
     for useless in words:
-        if useless == "the" or useless == "of" or len(useless) <= 1 or useless == "room":
+        if useless == "the" or useless == "of" or len(useless) <= 1 or useless == "room" or useless == "please":
             words.pop(words.index(useless))
     if key in confirm_commands:
         return key
@@ -78,6 +78,18 @@ def command():
                 if word in room_name:
                     room_to_go_to = world_map.map_dict[room_name]
                     words.pop(words.index(word))
+                    if not words:
+                        if room_to_go_to.name in world_map.current_room.connections:
+                            delay_print("Go to " + room_to_go_to.name + "?")
+                            key = input("> ")
+                            if key in confirm_commands:
+                                return change_rooms(room_to_go_to)
+                            if key in deny_commands:
+                                return delay_print("Okay.")
+                            else:
+                                return delay_print("huh?")
+                        else:
+                            delay_print("You can't get there form here.")
                     for other_words in words:
                         for commands in change_room_commands:
                             if other_words in commands:
@@ -108,19 +120,22 @@ def command():
             for loot in (room.loot + room.chest_loot):
                 if word in loot.name.lower():
                     thing_to_pick_up = loot
-                    for part in thing_to_pick_up.name:
-                        try:
-                            words.remove(part)
-                        except ValueError:
-                            continue
+                    if len(thing_to_pick_up.name.split()) > 1:
+                        for part in thing_to_pick_up.name.split():
+                            try:
+                                words.remove(part)
+                            except ValueError:
+                                continue
+                    else:
+                        words.remove(word)
                     if not words:
-                        if thing_to_pick_up in room.loot:
+                        if thing_to_pick_up in (room.loot + room.chest_loot):
                             delay_print("Pick up " + thing_to_pick_up.name + "?")
                             key = input("> ")
                             if key in confirm_commands:
                                 return player1.pick_up(thing_to_pick_up)
                             if key in deny_commands:
-                                return
+                                return delay_print("You leave the " + thing_to_pick_up.name + " alone.")
                             else:
                                 return delay_print("huh?")
                     else:
@@ -137,7 +152,7 @@ def command():
 def get_item(key):
     for word in key:
         for item in player1.inventory:
-            if word in item.name:
+            if word in item.name.lower():
                 return item
 
 

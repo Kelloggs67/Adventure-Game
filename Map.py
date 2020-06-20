@@ -53,7 +53,7 @@ class Map:
         print("")
 
     def peek_next_rooms(self, current_room):
-        print(current_room.name.capitalize() + " is connected to")
+        delay_print(current_room.name.capitalize() + " is connected to")
         for adjacent_room in current_room.get_connections():
             if current_room.connections[adjacent_room] == "Unlocked":
                 print("=>" + adjacent_room.capitalize())
@@ -75,7 +75,7 @@ class Map:
             else:
                 delay_print("You " + action + " " + room.name + ".")
         else:
-            print("The door to " + room.name + " is locked")
+            delay_print("The door to " + room.name + " is locked")
 
     def leave_room(self):
         self.peek_next_rooms(self.current_room)
@@ -113,8 +113,6 @@ def leave_room():
     delay_print("Where would you like to go?\n")
     world_map.peek_next_rooms(world_map.current_room)
     key = input("> ")
-    if key not in world_map.map_dict.keys():
-        return   delay_print("That's not a room.")
     words = key.split()
     try:
         for word in words:
@@ -126,6 +124,9 @@ def leave_room():
                             return change_rooms(world_map.map_dict[room])
     except:
         return delay_print("Huh?")
+
+    if key not in world_map.map_dict.keys():
+        return delay_print("That's not a room.")
 
 
 

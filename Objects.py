@@ -33,10 +33,10 @@ class Items():
         cls._instances -= dead
 
 
-rusty_axe = Items("Rusty Axe", "Axe", 5, 0, 0, 0, "Weapon", 10, 1)
-bike_helmet = Items("Bike Helmet", "Helmet", 0, 2, 0, 0, "Head", 5, 1)
-cool_sword = Items("Cool Sword", "Sword", 7, 0, 0, 0, "Weapon", 12, 1)
-potion = Items("Potion", "Potion", 0, 0, 0, 5, False, 5, 1)
+rusty_axe = Items("rusty axe", "Axe", 5, 0, 0, 0, "Weapon", 10, 1)
+bike_helmet = Items("bike helmet", "Helmet", 0, 2, 0, 0, "Head", 5, 1)
+cool_sword = Items("cool sword", "Sword", 7, 0, 0, 0, "Weapon", 12, 1)
+potion = Items("potion", "Potion", 0, 0, 0, 5, False, 5, 1)
 bedroom_key = Items("bedroom key", "key", 0, 0, 0, 0, False, 0, 0)
 
 all_items = []
@@ -190,16 +190,21 @@ class Chest(Static):
             self.state = "open"
             delay_print("You opened the " + self.name + ".")
             player1.current_room.chest_loot.extend(self.loot)
-            if len(self.loot) == 1:
-                delay_print("There's a " + self.loot[0].name + " in here!")
-                self.loot = []
-            if len(self.loot) > 1:
-                print(self.name.capitalize() + ":")
-                for item in self.loot:
-                    print(item.name)
-                self.loot = []
             if len(self.loot) < 1:
                 return
+            elif len(self.loot) == 1:
+                delay_print("There's a " + self.loot[0].name + " in here!")
+                self.loot = []
+            elif len(self.loot) == 2:
+                delay_print("There's a " + self.loot[0].name + " and a " + self.loot[1].name + " in here!")
+                self.loot = []
+            elif len(self.loot) > 2:
+                delay_print(self.name.capitalize() + ":")
+                for item in self.loot:
+                    print(item.name)
+                    time.sleep(.5)
+                self.loot = []
+
 
     def put_in_chest(self, item):
         if self.state == "closed":
@@ -248,6 +253,7 @@ bedroom_dresser.interactions["open"] = open_dresser
 bedroom_dresser.interactions["go through"] = open_dresser
 bedroom_dresser.interactions["search"] = open_dresser
 bedroom_dresser.interactions["open drawers"] = open_dresser
+bedroom_dresser.interactions["look in"] = open_dresser
 bedroom_dresser.interactions["put in"] = put_in_dresser
 bedroom_dresser.interactions["place in"] = put_in_dresser
 bedroom_dresser.interactions["close"] = close_dresser
