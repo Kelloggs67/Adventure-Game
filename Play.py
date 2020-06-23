@@ -45,4 +45,4 @@ def play_game():
        action = command()
 
 
-
+play_game()
