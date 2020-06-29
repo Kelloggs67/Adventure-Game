@@ -1,5 +1,4 @@
 import sys,time,random
-import winsound
 
 class Player:
     def __init__(self, name=None):
@@ -99,7 +98,7 @@ def create_character():
     delay_print("What is your name?")
     name_input = input("> ").strip().capitalize()
     player1.name = name_input
-    delay_print("Hello " + player1.name + "")
+    delay_print("Hello " + player1.name + ".")
     time.sleep(2)
     return player1
 

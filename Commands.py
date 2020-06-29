@@ -5,7 +5,7 @@ import string
 confirm_commands = ("ok", "okay", "sure", "let's do that", "fine", "okay, fine", "okay fine", "yes", "definitely", "k")
 deny_commands = ("no", "hell no", "nah", "na", "nope", "fuck that")
 pick_up_commands = ("pick up", "take", "loot", "grab", "hold", "get")
-look_around_commands = ("look", "look around")
+look_around_commands = ("look", "look around", "look at", "examine", "describe", "description")
 
 
 def command():
@@ -35,7 +35,7 @@ def command():
     if key == "loot":
         return print(room.loot + room.chest_loot)
     for useless in words:
-        if useless == "the" or useless == "of" or len(useless) <= 1 or useless == "room" or useless == "please":
+        if useless == "the" or useless == "of" or len(useless) <= 1 or useless == "please":
             words.pop(words.index(useless))
     if key in confirm_commands:
         return key
@@ -45,6 +45,19 @@ def command():
             return
         else:
             return leave_room()
+    for command in look_around_commands:
+        if command in key:
+            for word in words:
+                if word == "room":
+                    return delay_print(player1.current_room.description)
+                elif player1.current_room.name in key:
+                    return delay_print(player1.current_room.description)
+                for loot in (room.loot + room.chest_loot + player1.inventory):
+                    if word in loot.name:
+                        return delay_print(loot.description)
+                for object in player1.current_room.objects:
+                    if object in key:
+                        return delay_print(player1.current_room.objects[object].description)
     else:
         for word in words:
             if word in room.objects:

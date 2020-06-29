@@ -5,7 +5,7 @@ from Player import *
 class Items():
     _instances = set()
 
-    def __init__(self, name, type, attack, armor, max_health, health, equip, price, level):
+    def __init__(self, name, type, attack, armor, max_health, health, equip, price, level, description):
         self.name = name
         self.type = type
         self.attack = attack
@@ -16,7 +16,7 @@ class Items():
         self.price = price
         self.level = level
         self._instances.add(weakref.ref(self))
-        self.description = None
+        self.description = description
 
     def __repr__(self):
         return self.name
@@ -33,11 +33,11 @@ class Items():
         cls._instances -= dead
 
 
-rusty_axe = Items("rusty axe", "Axe", 5, 0, 0, 0, "Weapon", 10, 1)
-bike_helmet = Items("bike helmet", "Helmet", 0, 2, 0, 0, "Head", 5, 1)
-cool_sword = Items("cool sword", "Sword", 7, 0, 0, 0, "Weapon", 12, 1)
-potion = Items("potion", "Potion", 0, 0, 0, 5, False, 5, 1)
-bedroom_key = Items("bedroom key", "key", 0, 0, 0, 0, False, 0, 0)
+rusty_axe = Items("rusty axe", "Axe", 5, 0, 0, 0, "Weapon", 10, 1, "It's an old rusty axe.")
+bike_helmet = Items("bike helmet", "Helmet", 0, 2, 0, 0, "Head", 5, 1, "Safety first. Always wear your helmet.")
+cool_sword = Items("cool sword", "Sword", 7, 0, 0, 0, "Weapon", 12, 1, "This sword is cool.")
+potion = Items("potion", "Potion", 0, 0, 0, 5, False, 5, 1, "This potion will heal you by 5 HP.")
+bedroom_key = Items("bedroom key", "key", 0, 0, 0, 0, False, 0, 0, "The key to open up your bedroom door.")
 
 all_items = []
 for obj in Items.getinstances():

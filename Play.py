@@ -43,6 +43,4 @@ def play_game():
         count += 1
     while player1.current_room == bedroom:
        action = command()
-
-
 play_game()
