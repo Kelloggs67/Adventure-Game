@@ -144,8 +144,8 @@ bed.interactions["go to"] = get_in_bed
 # BED
 
 # LIGHT
-bedroom_lamp = Static("lamp", "the light is off.", "off")
-bedroom_light = Static("light", "the light is off.", "off")
+bedroom_lamp = Static("lamp", "The light is off.", "off")
+bedroom_light = Static("light", "The light is off.", "off")
 light_interactions_on = ["turn on", "open"]
 light_interactions_off = ["turn off", "close"]
 

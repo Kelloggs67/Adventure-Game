@@ -6,13 +6,15 @@ class Room:
         self.name = name
         self.connections = {}
         self.objects = {}
+        self.key = {}
         self.characters = []
         self.chest_loot = []
         self.loot = []
         self.description = None
 
-    def add_connection(self, room, weight="Unlocked"):
+    def add_connection(self, room, weight="Unlocked", key=None):
         self.connections[room] = weight
+        self.key[room] = key
 
     def get_connections(self):
         return list(self.connections.keys())

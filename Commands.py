@@ -6,7 +6,7 @@ confirm_commands = ("ok", "okay", "sure", "let's do that", "fine", "okay, fine",
 deny_commands = ("no", "hell no", "nah", "na", "nope", "fuck that")
 pick_up_commands = ("pick up", "take", "loot", "grab", "hold", "get")
 look_around_commands = ("look", "look around", "look at", "examine", "describe", "description")
-
+unlock_door_commands = ("unlock", "open")
 
 def command():
     key_original = input("> ")
@@ -58,6 +58,15 @@ def command():
                 for object in player1.current_room.objects:
                     if object in key:
                         return delay_print(player1.current_room.objects[object].description)
+    for command in unlock_door_commands:
+        if command in key:
+            for word in words:
+                if word == "door":
+                    return unlock_door()
+                for rooms in world_map.map_dict:
+                    if word in rooms:
+                        room_to_unlock = rooms
+                        return unlock_door(room_to_unlock)
     else:
         for word in words:
             if word in room.objects:
@@ -160,6 +169,7 @@ def command():
                         for command in pick_up_commands:
                             if command in action_string.strip():
                                 player1.pick_up(thing_to_pick_up)
+    return
 
 
 def get_item(key):

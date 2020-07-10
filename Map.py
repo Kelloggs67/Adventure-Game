@@ -14,10 +14,10 @@ class Map:
     def add_room(self, room):
         self.map_dict[room.name] = room
 
-    def add_connection(self, from_room, to_room, weight="Unlocked"):
-        self.map_dict[from_room.name].add_connection(to_room.name, weight)
+    def add_connection(self, from_room, to_room, weight="Unlocked", key=None):
+        self.map_dict[from_room.name].add_connection(to_room.name, weight, key)
         if not self.directed:
-            self.map_dict[to_room.name].add_connection(from_room.name, weight)
+            self.map_dict[to_room.name].add_connection(from_room.name, weight, key)
 
     def remove_connection(self, from_room, to_room):
         pass
@@ -66,8 +66,62 @@ class Map:
         self.current_room = room
         player1.current_room = room
 
+    def unlock_door(self, connecting_room=None):
+        if len(self.current_room.key) == 1:
+            if list(self.current_room.key.values())[0] in player1.inventory:
+                player1.inventory.remove(list(self.current_room.key.values())[0])
+                self.current_room.connections[list(self.current_room.connections.keys())[0]] = "Unlocked"
+                return delay_print("You unlocked " + self.current_room.name + " door with the " + list(self.current_room.key.values())[0].name + "!")
+            else:
+                return delay_print("You don't have the key.")
+        else:
+            if connecting_room:
+                if self.current_room.key[connecting_room.name] in player1.inventory:
+                    player1.inventory.remove(self.current_room.key[connecting_room.name])
+                    self.current_room.connections[connecting_room.name] = "Unlocked"
+                    return delay_print("You unlocked " + self.current_room.name + " door with the " + self.current_room.key[connecting_room.name].name + "!")
+                else:
+                    return delay_print("You don't have the key to " + connecting_room.name + ".")
+            elif not connecting_room:
+                delay_print("Which door would you like to open?")
+                for adjacent_room in self.current_room.get_connections():
+                    if self.current_room.connections[adjacent_room] == "Locked":
+                        print("=>" + adjacent_room.capitalize())
+                    else:
+                        continue
+                input = input("> ")
+                words = input.split()
+                try:
+                    for word in words:
+                        if word == "the" or word == "room":
+                            words.pop(words.index(word))
+                            for other_word in words:
+                                for room in world_map.map_dict.keys():
+                                    if other_word in room:
+                                        connecting_room = room
+                except:
+                    return delay_print("Huh?")
+                if self.current_room.key[connecting_room.name] in player1.inventory:
+                    delay_print("You unlocked " + self.current_room.name + " door with the " + self.current_room.key[connecting_room.name].name + "!")
+                    player1.inventory.remove(self.current_room.key[connecting_room.name])
+                    self.current_room.connections[connecting_room.name] = "Unlocked"
+                    return
+                else:
+                    return delay_print("You don't have the key to " + connecting_room.name + ".")
+
+
     def change_rooms(self, room, action=None):
         if self.current_room.connections[room.name] == "Unlocked":
+            self.current_room = room
+            player1.current_room = room
+            if action == None:
+                delay_print("You go into " + room.name + ".")
+            else:
+                delay_print("You " + action + " " + room.name + ".")
+        elif self.current_room.key[room.name] in player1.inventory:
+            delay_print("You unlocked " + self.current_room.name + " door with the " + self.current_room.key[room.name].name + "!")
+            player1.inventory.remove(self.current_room.key[room.name])
+            self.current_room.connections[room.name] = "Unlocked"
             self.current_room = room
             player1.current_room = room
             if action == None:
@@ -89,7 +143,7 @@ world_map.add_room(bathroom)
 world_map.add_room(kitchen)
 world_map.add_room(living_room)
 world_map.add_room(front_door)
-world_map.add_connection(bedroom, living_room, "Locked")
+world_map.add_connection(bedroom, living_room, "Locked", bedroom_key)
 world_map.add_connection(living_room, bathroom)
 world_map.add_connection(living_room, kitchen)
 world_map.add_connection(living_room, front_door, "Locked")
@@ -128,6 +182,10 @@ def leave_room():
     if key not in world_map.map_dict.keys():
         return delay_print("That's not a room.")
 
+def unlock_door(connecting_room=None):
+    world_map.unlock_door(connecting_room)
+    return
+
 
 
 change_room_commands = ("move to", "go to", "enter", "walk to", "jump to", "waddle to", "fly to", "go into", "move into", "walk into", "fly into", "walk over to", "go over to")
@@ -135,5 +193,4 @@ world_map.functions[change_room_commands] = change_rooms
 leave_room_commands = ("leave", "exit", "change rooms", "leave room")
 world_map.functions[leave_room_commands] = leave_room
 room_commands = [change_room_commands, leave_room_commands]
-
 

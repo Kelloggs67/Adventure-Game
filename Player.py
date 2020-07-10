@@ -5,7 +5,9 @@ class Player:
         self.name = name
         self.stats = {"max_health": 10,
                       "attack": 5,
-                      "armor": 0}
+                      "armor": 0,
+                      "Exp": 0,
+                      "Level": 1}
         self.health = self.stats["max_health"]
         self.equipped = {"Head": None,
                          "Chest": None,
@@ -37,6 +39,7 @@ class Player:
     def use_potion(self, item):
         if item in self.inventory:
             self.health += item.health
+            self.inventory.remove(item)
         else:
             print("You don't have that item")
 
@@ -79,6 +82,7 @@ class Player:
             self.inventory.pop(self.inventory.index(item))
             self.equipped[item.equip] = item
             self.update_stats_equip()
+
 
 
 typing_speed = 120
