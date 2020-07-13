@@ -5,8 +5,9 @@ import string
 confirm_commands = ("ok", "okay", "sure", "let's do that", "fine", "okay, fine", "okay fine", "yes", "definitely", "k")
 deny_commands = ("no", "hell no", "nah", "na", "nope", "fuck that")
 pick_up_commands = ("pick up", "take", "loot", "grab", "hold", "get")
-look_around_commands = ("look", "look around", "look at", "examine", "describe", "description")
+look_around_commands = ("look around", "look at", "examine", "describe", "description")
 unlock_door_commands = ("unlock", "open")
+use_commands = ("use", "apply", "operate", "utilize")
 
 def command():
     key_original = input("> ")
@@ -45,6 +46,14 @@ def command():
             return
         else:
             return leave_room()
+    for command in use_commands:
+        if command in key:
+            if get_item(key):
+                return get_item(key).use()
+            else:
+                return delay_print("You don't have that item.")
+        else:
+            continue
     for command in look_around_commands:
         if command in key:
             for word in words:
@@ -66,7 +75,11 @@ def command():
                 for rooms in world_map.map_dict:
                     if word in rooms:
                         room_to_unlock = rooms
-                        return unlock_door(room_to_unlock)
+                        functionality = check_player_state()
+                        if functionality == False:
+                            return
+                        else:
+                            return unlock_door(room_to_unlock)
     else:
         for word in words:
             if word in room.objects:
@@ -155,7 +168,11 @@ def command():
                             delay_print("Pick up " + thing_to_pick_up.name + "?")
                             key = input("> ")
                             if key in confirm_commands:
-                                return player1.pick_up(thing_to_pick_up)
+                                functionality = check_player_state()
+                                if functionality == False:
+                                    return
+                                else:
+                                    return player1.pick_up(thing_to_pick_up)
                             if key in deny_commands:
                                 return delay_print("You leave the " + thing_to_pick_up.name + " alone.")
                             else:
@@ -168,7 +185,11 @@ def command():
                                 action_string += (" " + other_words)
                         for command in pick_up_commands:
                             if command in action_string.strip():
-                                player1.pick_up(thing_to_pick_up)
+                                functionality = check_player_state()
+                                if functionality == False:
+                                    return
+                                else:
+                                    return player1.pick_up(thing_to_pick_up)
     return
 
 

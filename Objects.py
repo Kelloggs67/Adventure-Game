@@ -5,7 +5,7 @@ from Player import *
 class Items():
     _instances = set()
 
-    def __init__(self, name, type, attack, armor, max_health, health, equip, price, level, description):
+    def __init__(self, name, type, attack, armor, max_health, health, equip, price, level, description, use=None):
         self.name = name
         self.type = type
         self.attack = attack
@@ -17,6 +17,7 @@ class Items():
         self.level = level
         self._instances.add(weakref.ref(self))
         self.description = description
+        self.use = use
 
     def __repr__(self):
         return self.name

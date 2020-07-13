@@ -66,6 +66,7 @@ class Map:
         self.current_room = room
         player1.current_room = room
 
+
     def unlock_door(self, connecting_room=None):
         if len(self.current_room.key) == 1:
             if list(self.current_room.key.values())[0] in player1.inventory:
@@ -185,6 +186,8 @@ def leave_room():
 def unlock_door(connecting_room=None):
     world_map.unlock_door(connecting_room)
     return
+
+bedroom_key.use = unlock_door
 
 
 
